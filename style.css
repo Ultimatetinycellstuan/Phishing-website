@@ -15,7 +15,9 @@ header {
   box-shadow: 2px 2px 9px grey;
   padding: 1.05em;
 }
-
+header h2{
+  text-align:center;
+}
 .logo {
   margin-right: 20px;
 }

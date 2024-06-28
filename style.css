@@ -1,0 +1,135 @@
+body {
+  overflow-x: hidden;
+}
+
+/* CSS */
+header {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 2px 2px 9px grey;
+  padding: 1.05em;
+}
+
+.logo {
+  margin-right: 20px;
+}
+
+.logo img {
+  width: 45px;
+  height: 45px;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 10px; /* added 10px of padding to the left */
+  display: flex;
+}
+
+nav li {
+  margin-right: 20px;
+}
+
+nav li:hover {
+  cursor: pointer; /* change cursor to pointer on hover */
+}
+
+nav a {
+  text-decoration: none;
+  color: #333; /* default text color */
+  border-bottom: 2px solid transparent; /* add a transparent underline by default */
+  transition: border-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover {
+  border-bottom: 2px solid #cf1717; /* add a red underline on hover */
+}
+intro h2 {
+  font-size: 36px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  font-weight: bold; /* make the text bold */
+  color: #3498db; /* add a touch of blue to the text color */
+  margin-bottom: 10px; /* add some space between the h2 and h3 elements */
+}
+
+intro h3 {
+  font-family: 'Lato', sans-serif;
+  margin-left: 20px; /* add some space to the left */
+  color: #666; /* darken the text color a bit */
+}
+form {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Style the input fields and textarea */
+  input[type="url"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+  }
+
+  /* Style the submit button */
+  input[type="submit"] {
+    background-color: #3498db; /* same blue shade as before */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #2980b9; /* darker blue shade on hover */
+  }
+#submit-btn {
+  background-color: #ADD8E6; /* Light blue */
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#submit-btn:hover {
+  background-color: #87CEEB; /* Slightly darker light blue on hover */
+}
+
+#submit-btn:active {
+  background-color: #87CEEB;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.norton-btn {
+  /* Light blue */
+  background-color: #9a9393;
+  color: #de1717;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.norton-btn:hover { /* Slightly darker light blue on hover */
+  box-shadow: 0 0 10px rgb(255, 0, 0, 0.2); /* Add a subtle box shadow on hover */
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.norton-btn:active {
+  background-color: #12d94d; /* Even darker light blue on active */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Add a more prominent box shadow on active */
+}
+p {
+  text-align: center;
+}

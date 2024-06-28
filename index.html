@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Phishing Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+      <div class="logo">
+        <img src="https://raw.githubusercontent.com/Ultimatetinycellstuan/roblox/main/309069.png" alt="Logo">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="pages/FAQ.html">FAQ</a></li>
+          <li><a href="pages/About.html">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <h2>Report a Phishing Website</h2>
+    <form id="reportForm">
+        <label for="url">Phishing Website URL:</label><br>
+        <input type="url" id="url" name="url" required><br><br>
+        <button type="submit" id="submit-btn">Submit Report</button>
+    </form>
+
+    <div id="result" style="display: none;">
+        <p id="reportResult"></p>
+        <p><a href="#" id="nortonLink" target="_blank"><button class="norton-btn">View Norton SafeWeb findings</button></a></p>
+    </div>
+
+  <script>
+    const webhookUrl = 'Replace_This_With_Url';
+    const reportForm = document.getElementById('reportForm');
+    const resultDiv = document.getElementById('result');
+    const reportResult = document.getElementById('reportResult');
+    const nortonLink = document.getElementById('nortonLink');
+
+    reportForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const url = document.getElementById('url').value;
+
+      try {
+        // Construct Norton SafeWeb link
+        const nortonUrl = `https://safeweb.norton.com/report?url=${encodeURIComponent(url)}&action=report`;
+        nortonLink.href = nortonUrl;
+        nortonLink.target = "_blank"; // Open in new tab
+
+        // Submit phishing report to Discord
+        const reportSent = await submitPhishingReportToDiscord(url, webhookUrl);
+
+        if (reportSent) {
+          reportResult.textContent = 'Phishing report submitted successfully to Discord.';
+        } else {
+          reportResult.textContent = 'Failed to submit phishing report.';
+        }
+
+        // Show result and Norton SafeWeb link
+        resultDiv.style.display = 'block';
+
+      } catch (error) {
+        console.error('Error submitting report:', error);
+        reportResult.textContent = 'Failed to submit phishing report.';
+        resultDiv.style.display = 'block';
+      }
+    });
+
+    async function submitPhishingReportToDiscord(url, webhookUrl) {
+      const data = {
+        'content': `Phishing report: ${url}`
+      };
+
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          return true; // Report sent successfully
+        } else {
+          return false; // Report failed to send
+        }
+      } catch (error) {
+        console.error('Error submitting report:', error);
+        return false; // Report failed to send
+      }
+    }
+  </script>
+</body>
+</html>
+<footer>
+    <p>View this project on <a href="https://github.com/Ultimatetinycellstuan/Ultimatetinycellstuans.github.io" target="_blank">GitHub
+        </footer>

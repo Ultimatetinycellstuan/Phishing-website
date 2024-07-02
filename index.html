@@ -20,7 +20,7 @@
       </nav>
     </header>
     <h2>Report a Phishing Website</h2>
-    <form id="reportForm">
+    <form id="reportForm" autocomplete="off">
         <label for="url">Phishing Website URL:</label><br>
         <input type="url" id="url" name="url" required><br><br>
         <button type="submit" id="submit-btn">Submit Report</button>
@@ -32,6 +32,10 @@
     </div>
 
   <script>
+      window.onload = function() {
+        document.getElementById('url').value = '';
+        // clear other form fields if needed
+    };
     const webhookUrl = 'Replace_This_With_Url';
     const reportForm = document.getElementById('reportForm');
     const resultDiv = document.getElementById('result');

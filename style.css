@@ -2,7 +2,6 @@ body {
   overflow-x: hidden;
 }
 
-/* CSS */
 header {
   position: relative;
   top: 0;
@@ -12,45 +11,77 @@ header {
   justify-content: space-between;
   align-items: center;
   z-index: 100;
-  box-shadow: 2px 2px 9px grey;
+  background-color: #fff; /* added a white background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* updated box-shadow for a softer look */
   padding: 1.05em;
 }
-header h2{
-  text-align:center;
-}
+
 .logo {
   margin-right: 20px;
+  display: inline-block; /* added display: inline-block for better logo alignment */
 }
 
 .logo img {
   width: 45px;
   height: 45px;
+  border-radius: 50%; /* added a circular border-radius for a nicer logo look */
+  object-fit: cover; /* added object-fit: cover to ensure the logo image is fully visible */
+}
+
+nav {
+  display: flex;
+  align-items: center; /* added align-items: center for better nav alignment */
 }
 
 nav ul {
   list-style: none;
   margin: 0;
-  padding: 0 0 0 10px; /* added 10px of padding to the left */
+  padding: 0;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 30px; /* added gap property to add space between nav items */
 }
 
 nav li {
-  margin-right: 20px;
+  position: relative; /* removed margin-right: 20px */
+}
+
+nav li:last-child {
+  margin-right: 20px; /* removed margin-right from the last nav item */
 }
 
 nav li:hover {
-  cursor: pointer; /* change cursor to pointer on hover */
+  cursor: pointer; /* kept the cursor: pointer on hover */
 }
 
 nav a {
   text-decoration: none;
-  color: #333; /* default text color */
-  border-bottom: 2px solid transparent; /* add a transparent underline by default */
-  transition: border-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #333; /* kept the default text color */
+  border-bottom: 2px solid transparent; /* kept the transparent underline by default */
+  transition: border-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* kept the transition effect */
+  font-size: 18px; /* added a font-size for better typography */
+  font-weight: 500; /* added a font-weight for better typography */
 }
 
 nav a:hover {
-  border-bottom: 2px solid #cf1717; /* add a red underline on hover */
+  border-bottom: 2px solid #cf1717; /* kept the red underline on hover */
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #cf1717;
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover::after {
+  transform: scaleX(1);
 }
 intro h2 {
   font-size: 36px;

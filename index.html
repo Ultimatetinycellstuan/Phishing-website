@@ -31,28 +31,39 @@
         <p><a href="#" id="nortonLink" target="_blank"><button class="norton-btn">View Norton SafeWeb findings</button></a></p>
     </div>
 
-  <script>
-      window.onload = function() {
-        document.getElementById('url').value = '';
-        // clear other form fields if needed
-    };
-    const webhookUrl = 'Replace_This_With_Url';
-    const reportForm = document.getElementById('reportForm');
-    const resultDiv = document.getElementById('result');
-    const reportResult = document.getElementById('reportResult');
-    const nortonLink = document.getElementById('nortonLink');
+<script>
+  const webhookUrl = 'https://discord.com/api/webhooks/1255926878968217763/6lYPJ8UgHEmRkBlBcplzhKN9zt-UoOJ7Cwt6NMJaT5dnesmLGIwodkwjkvdyUQZkMd9m';
+  const reportForm = document.getElementById('reportForm');
+  const resultDiv = document.getElementById('result');
+  const reportResult = document.getElementById('reportResult');
+  const nortonLink = document.getElementById('nortonLink');
 
-    reportForm.addEventListener('submit', async function(event) {
-      event.preventDefault();
+  reportForm.addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-      const url = document.getElementById('url').value;
+    let url = document.getElementById('url').value.trim();
 
-      try {
-        // Construct Norton SafeWeb link
-        const nortonUrl = `https://safeweb.norton.com/report?url=${encodeURIComponent(url)}&action=report`;
-        nortonLink.href = nortonUrl;
-        nortonLink.target = "_blank"; // Open in new tab
+    // Add https:// protocol if not present
+    if (!/^https?:\/\//i.test(url)) {
+  if (!/^www\./i.test(url)) {
+    url = `www.${url}`;
+  }
+  url = `https://${url}`;
+}
 
+    try {
+      // Construct Norton SafeWeb link
+      const nortonUrl = `https://safeweb.norton.com/report?url=${encodeURIComponent(url)}&action=report`;
+      nortonLink.href = nortonUrl;
+      nortonLink.target = "_blank"; // Open in new tab
+
+      // Check Norton SafeWeb result
+      const nortonResult = await checkNortonSafeWeb(url);
+
+      if (nortonResult === 'afe') {
+        reportResult.textContent = 'Norton SafeWeb reports this URL as safe.';
+        resultDiv.style.display = 'block';
+      } else {
         // Submit phishing report to Discord
         const reportSent = await submitPhishingReportToDiscord(url, webhookUrl);
 
@@ -61,42 +72,64 @@
         } else {
           reportResult.textContent = 'Failed to submit phishing report.';
         }
-        document.getElementById('url').value = '';
+
         // Show result and Norton SafeWeb link
         resultDiv.style.display = 'block';
-
-      } catch (error) {
-        console.error('Error submitting report:', error);
-        reportResult.textContent = 'Failed to submit phishing report.';
-        resultDiv.style.display = 'block';
       }
-    });
 
-    async function submitPhishingReportToDiscord(url, webhookUrl) {
-      const data = {
-        'content': `Phishing report: ${url}`
-      };
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      reportResult.textContent = 'Failed to submit phishing report.';
+      resultDiv.style.display = 'block';
+    }
+  });
 
-      try {
-        const response = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+  async function checkNortonSafeWeb(url) {
+    // NOTE: Norton SafeWeb API doesn't provide a direct way to check the safety of a URL via API.
+    // This function is a placeholder and may not work as intended.
+    // You may need to use a different API or approach to check the safety of the URL.
+    const nortonApiUrl = `https://safeweb.norton.com/report?url=${encodeURIComponent(url)}&action=check`;
+    const response = await fetch(nortonApiUrl);
+    const data = await response.json();
 
-        if (response.ok) {
-          return true; // Report sent successfully
-        } else {
-          return false; // Report failed to send
-        }
-      } catch (error) {
-        console.error('Error submitting report:', error);
+    if (data.result === 'afe') {
+      return 'afe';
+    } else {
+      return 'not safe';
+    }
+  }
+
+  async function submitPhishingReportToDiscord(url, webhookUrl) {
+    const data = {
+      'content': `Phishing report: ${url}`
+    };
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        return true; // Report sent successfully
+      } else {
         return false; // Report failed to send
       }
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      return false; // Report failed to send
     }
-  </script>
+  }
+
+  // Add an event listener to the Norton link to open the Norton SafeWeb results page
+  nortonLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    window.open(nortonLink.href, '_blank');
+  });
+</script>
 </body>
 </html>
 <footer>

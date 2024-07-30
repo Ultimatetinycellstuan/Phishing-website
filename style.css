@@ -144,23 +144,24 @@ form {
   background-color: #87CEEB;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-.norton-btn {
-  /* Light blue */
-  background-color: #9a9393;
-  color: #de1717;
+.virus-total-btn {
+  /* Replace Norton SafeWeb styles with VirusTotal styles */
+  background-color: #4CAF50; /* Green background color */
+  color: #ffffff; /* White text color */
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
 }
 
-.norton-btn:hover { /* Slightly darker light blue on hover */
-  box-shadow: 0 0 10px rgb(255, 0, 0, 0.2); /* Add a subtle box shadow on hover */
+.virus-total-btn:hover {
+  background-color: #3e8e41; /* Darker green background color on hover */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow on hover */
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.norton-btn:active {
-  background-color: #12d94d; /* Even darker light blue on active */
+.virus-total-btn:active {
+  background-color: #2e6c31; /* Even darker green background color on active */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Add a more prominent box shadow on active */
 }
 p {

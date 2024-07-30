@@ -1,5 +1,5 @@
 ## How to use the Safe Browsing tool
-**This Tool is used to report phishing websites through My phishing report and automates the Norton Safesearch results.**
+**This Tool is used to report phishing websites through My phishing report and automates the VirusTotal Safesearch results.**
 ```Javascript
 const webhookUrl = 'Replace_This_With_Url';
 ```

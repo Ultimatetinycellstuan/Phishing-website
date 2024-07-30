@@ -67,80 +67,87 @@
         // Submit phishing report to Discord
         const reportSent = await submitPhishingReportToDiscord(url, webhookUrl);
 
-        if (reportSent) {
-          reportResult.textContent = 'Phishing report submitted successfully to Discord.';
-        } else {
-          reportResult.textContent = 'Failed to submit phishing report.';
+                 if (reportSent) {
+            reportResult.textContent = 'Phishing report submitted successfully to Discord.';
+          } else {
+            reportResult.textContent = 'Failed to submit phishing report.';
+          }
+
+          // Show result and VirusTotal link
+          resultDiv.style.display = 'block';
         }
 
-        // Show result and VirusTotal link
+      } catch (error) {
+        console.error('Error submitting report:', error);
+        reportResult.textContent = 'Failed to submit phishing report.';
         resultDiv.style.display = 'block';
       }
+    });
 
-    } catch (error) {
-      console.error('Error submitting report:', error);
-      reportResult.textContent = 'Failed to submit phishing report.';
-      resultDiv.style.display = 'block';
-    }
-  });
+    async function checkVirusTotal(url) {
+      // NOTE: VirusTotal API requires a API key to use.
+      // You can obtain a API key by creating a account on VirusTotal.
+      const virusTotalApiKey = 'YOUR_API_KEY_HERE';
+      const virusTotalApiUrl = `https://www.virustotal.com/api/v3/urls`;
+      const headers = {
+        'x-apikey': virusTotalApiKey
+      };
+      const data = {
+        'url': url
+      };
 
-  async function checkVirusTotal(url) {
-    // NOTE: VirusTotal API requires a API key to use.
-    // You can obtain a API key by creating a account on VirusTotal.
-    const virusTotalApiKey = 'YOUR_API_KEY_HERE';
-    const virusTotalApiUrl = `https://www.virustotal.com/api/v3/urls/${encodeURIComponent(url)}`;
-    const headers = {
-      'x-apikey': virusTotalApiKey
-    };
+      try {
+        const response = await fetch(virusTotalApiUrl, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(data)
+        });
+        const jsonData = await response.json();
 
-    try {
-      const response = await fetch(virusTotalApiUrl, { headers });
-      const data = await response.json();
-
-      if (data.data.attributes.last_analysis_stats.malicious === 0) {
-        return 'clean';
-      } else {
-        return 'malicious';
+        if (jsonData.data.attributes.last_analysis_stats.malicious === 0) {
+          return 'clean';
+        } else {
+          return 'malicious';
+        }
+      } catch (error) {
+        console.error('Error checking VirusTotal:', error);
+        return 'unknown';
       }
-    } catch (error) {
-      console.error('Error checking VirusTotal:', error);
-      return 'unknown';
     }
-  }
 
-  async function submitPhishingReportToDiscord(url, webhookUrl) {
-    const data = {
-      'content': `Phishing report: ${url}`
-    };
+    async function submitPhishingReportToDiscord(url, webhookUrl) {
+      const data = {
+        'content': `Phishing report: ${url}`
+      };
 
-    try {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
 
-      if (response.ok) {
-        return true; // Report sent successfully
-      } else {
+        if (response.ok) {
+          return true; // Report sent successfully
+        } else {
+          return false; // Report failed to send
+        }
+      } catch (error) {
+        console.error('Error submitting report:', error);
         return false; // Report failed to send
       }
-    } catch (error) {
-      console.error('Error submitting report:', error);
-      return false; // Report failed to send
     }
-  }
 
-  // Add an event listener to the Norton link to open the Norton SafeWeb results page
-virusTotalLink.addEventListener('click', function(event) {
-  event.preventDefault();
-  window.open(virusTotalLink.href, '_blank');
-});
-</script>
+    // Add an event listener to the Norton link to open the Norton SafeWeb results page
+    nortonLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      window.open(nortonLink.href, '_blank');
+    });
+  </script>
 </body>
-</html>
 <footer>
-    <p>View this project on <a href="https://github.com/Ultimatetinycellstuan/Ultimatetinycellstuan.github.io" target="_blank">GitHub
-        </footer>
+  <p>View this project on <a href="https://github.com/Ultimatetinycellstuan/Ultimatetinycellstuan.github.io" target="_blank">GitHub</a></p>
+</footer>
+</html>

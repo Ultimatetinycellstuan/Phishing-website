@@ -32,11 +32,11 @@
     </div>
 
 <script>
-  const webhookUrl = 'https://discord.com/api/webhooks/1255926878968217763/6lYPJ8UgHEmRkBlBcplzhKN9zt-UoOJ7Cwt6NMJaT5dnesmLGIwodkwjkvdyUQZkMd9m';
+  const webhookUrl = 'https://discord.com/api/webhooks/YOUR_API_KEY';
   const reportForm = document.getElementById('reportForm');
   const resultDiv = document.getElementById('result');
   const reportResult = document.getElementById('reportResult');
-  const nortonLink = document.getElementById('nortonLink');
+  const virusTotalLink = document.getElementById('virusTotalLink');
 
   reportForm.addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -45,13 +45,13 @@
 
     // Add https:// protocol if not present
     if (!/^https?:\/\//i.test(url)) {
-  if (!/^www\./i.test(url)) {
-    url = `www.${url}`;
-  }
-  url = `https://${url}`;
-}
+      if (!/^www\./i.test(url)) {
+        url = `www.${url}`;
+      }
+      url = `https://${url}`;
+    }
 
-     try {
+    try {
       // Construct VirusTotal link
       const virusTotalUrl = `https://www.virustotal.com/gui/url/${encodeURIComponent(url)}`;
       virusTotalLink.href = virusTotalUrl;
@@ -67,53 +67,53 @@
         // Submit phishing report to Discord
         const reportSent = await submitPhishingReportToDiscord(url, webhookUrl);
 
-                 if (reportSent) {
-            reportResult.textContent = 'Phishing report submitted successfully to Discord.';
-          } else {
-            reportResult.textContent = 'Failed to submit phishing report.';
-          }
-
-          // Show result and VirusTotal link
-          resultDiv.style.display = 'block';
+        if (reportSent) {
+          reportResult.textContent = 'Phishing report submitted successfully to Discord.';
+        } else {
+          reportResult.textContent = 'Failed to submit phishing report.';
         }
 
-      } catch (error) {
-        console.error('Error submitting report:', error);
-        reportResult.textContent = 'Failed to submit phishing report.';
+        // Show result and VirusTotal link
         resultDiv.style.display = 'block';
       }
-    });
 
-    async function checkVirusTotal(url) {
-      // NOTE: VirusTotal API requires a API key to use.
-      // You can obtain a API key by creating a account on VirusTotal.
-      const virusTotalApiKey = 'YOUR_API_KEY_HERE';
-      const virusTotalApiUrl = `https://www.virustotal.com/api/v3/urls`;
-      const headers = {
-        'x-apikey': virusTotalApiKey
-      };
-      const data = {
-        'url': url
-      };
-
-      try {
-        const response = await fetch(virusTotalApiUrl, {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify(data)
-        });
-        const jsonData = await response.json();
-
-        if (jsonData.data.attributes.last_analysis_stats.malicious === 0) {
-          return 'clean';
-        } else {
-          return 'malicious';
-        }
-      } catch (error) {
-        console.error('Error checking VirusTotal:', error);
-        return 'unknown';
-      }
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      reportResult.textContent = 'Failed to submit phishing report.';
+      resultDiv.style.display = 'block';
     }
+  });
+
+  async function checkVirusTotal(url) {
+    // NOTE: VirusTotal API requires a API key to use.
+    // You can obtain a API key by creating a account on VirusTotal.
+    const virusTotalApiKey = 'YOUR_API_KEY_HERE';
+    const virusTotalApiUrl = `https://www.virustotal.com/api/v3/urls`;
+    const headers = {
+      'x-apikey': virusTotalApiKey
+    };
+    const data = {
+      'url': url
+    };
+
+    try {
+      const response = await fetch(virusTotalApiUrl, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+      });
+      const jsonData = await response.json();
+
+      if (jsonData.data.attributes.last_analysis_stats.malicious === 0) {
+        return 'clean';
+      } else {
+        return 'alicious';
+      }
+    } catch (error) {
+      console.error('Error checking VirusTotal:', error);
+      return 'unknown';
+    }
+  }
 
     async function submitPhishingReportToDiscord(url, webhookUrl) {
       const data = {

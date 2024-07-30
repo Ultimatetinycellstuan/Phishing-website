@@ -51,17 +51,17 @@
   url = `https://${url}`;
 }
 
-    try {
-      // Construct Norton SafeWeb link
-      const nortonUrl = `https://safeweb.norton.com/report?url=${encodeURIComponent(url)}&action=report`;
-      nortonLink.href = nortonUrl;
-      nortonLink.target = "_blank"; // Open in new tab
+     try {
+      // Construct VirusTotal link
+      const virusTotalUrl = `https://www.virustotal.com/gui/url/${encodeURIComponent(url)}`;
+      virusTotalLink.href = virusTotalUrl;
+      virusTotalLink.target = "_blank"; // Open in new tab
 
-      // Check Norton SafeWeb result
-      const nortonResult = await checkNortonSafeWeb(url);
+      // Check VirusTotal result
+      const virusTotalResult = await checkVirusTotal(url);
 
-      if (nortonResult === 'afe') {
-        reportResult.textContent = 'Norton SafeWeb reports this URL as safe.';
+      if (virusTotalResult === 'clean') {
+        reportResult.textContent = 'VirusTotal reports this URL as clean.';
         resultDiv.style.display = 'block';
       } else {
         // Submit phishing report to Discord
@@ -73,7 +73,7 @@
           reportResult.textContent = 'Failed to submit phishing report.';
         }
 
-        // Show result and Norton SafeWeb link
+        // Show result and VirusTotal link
         resultDiv.style.display = 'block';
       }
 
@@ -84,18 +84,27 @@
     }
   });
 
-  async function checkNortonSafeWeb(url) {
-    // NOTE: Norton SafeWeb API doesn't provide a direct way to check the safety of a URL via API.
-    // This function is a placeholder and may not work as intended.
-    // You may need to use a different API or approach to check the safety of the URL.
-    const nortonApiUrl = `https://safeweb.norton.com/report?url=${encodeURIComponent(url)}&action=check`;
-    const response = await fetch(nortonApiUrl);
-    const data = await response.json();
+  async function checkVirusTotal(url) {
+    // NOTE: VirusTotal API requires a API key to use.
+    // You can obtain a API key by creating a account on VirusTotal.
+    const virusTotalApiKey = 'YOUR_API_KEY_HERE';
+    const virusTotalApiUrl = `https://www.virustotal.com/api/v3/urls/${encodeURIComponent(url)}`;
+    const headers = {
+      'x-apikey': virusTotalApiKey
+    };
 
-    if (data.result === 'afe') {
-      return 'afe';
-    } else {
-      return 'not safe';
+    try {
+      const response = await fetch(virusTotalApiUrl, { headers });
+      const data = await response.json();
+
+      if (data.data.attributes.last_analysis_stats.malicious === 0) {
+        return 'clean';
+      } else {
+        return 'malicious';
+      }
+    } catch (error) {
+      console.error('Error checking VirusTotal:', error);
+      return 'unknown';
     }
   }
 
@@ -125,10 +134,10 @@
   }
 
   // Add an event listener to the Norton link to open the Norton SafeWeb results page
-  nortonLink.addEventListener('click', function(event) {
-    event.preventDefault();
-    window.open(nortonLink.href, '_blank');
-  });
+virusTotalLink.addEventListener('click', function(event) {
+  event.preventDefault();
+  window.open(virusTotalLink.href, '_blank');
+});
 </script>
 </body>
 </html>

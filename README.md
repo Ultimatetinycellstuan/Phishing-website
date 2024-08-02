@@ -1,5 +1,5 @@
 ## How to use the Safe Browsing tool
-**This Tool is used to report phishing websites through My phishing report and automates the VirusTotal Safesearch results.**
+**This Tool is used to report phishing websites through My phishing report and automates the Norton Safesearch results.**
 ```Javascript
 const webhookUrl = 'Replace_This_With_Url';
 ```
@@ -22,3 +22,4 @@ Here's a guide on how to host a website on Replit:
 https://replit.com/~
 Create a new Repl: Go to Replit and create a new Repl. Choose "HTML, CSS, JS" as the template.
 Upload your files: Upload your HTML, CSS, and JS files to the Repl. You can do this by dragging and dropping the files into the Repl's file explorer or by using the "Upload file" button.
+

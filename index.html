@@ -32,40 +32,31 @@
     </div>
 
 <script>
-  const webhookUrl = 'https://discord.com/api/webhooks/YOUR_API_KEY';
-  const reportForm = document.getElementById('reportForm');
-  const resultDiv = document.getElementById('result');
-  const reportResult = document.getElementById('reportResult');
-  const virusTotalLink = document.getElementById('virusTotalLink');
+    const reportForm = document.getElementById('reportForm');
+    const resultDiv = document.getElementById('result');
+    const reportResult = document.getElementById('reportResult');
+    const nortonSafeWebLink = document.getElementById('nortonSafeWebLink');
 
-  reportForm.addEventListener('submit', async function(event) {
-    event.preventDefault();
+    reportForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
 
-    let url = document.getElementById('url').value.trim();
+      let url = document.getElementById('url').value.trim();
 
-    // Add https:// protocol if not present
-    if (!/^https?:\/\//i.test(url)) {
-      if (!/^www\./i.test(url)) {
-        url = `www.${url}`;
+      // Add https:// protocol if not present
+      if (!/^https?:\/\//i.test(url)) {
+        url = `https://${url}`;
       }
-      url = `https://${url}`;
-    }
 
-    try {
-      // Construct VirusTotal link
-      const virusTotalUrl = `https://www.virustotal.com/gui/url/${encodeURIComponent(url)}`;
-      virusTotalLink.href = virusTotalUrl;
-      virusTotalLink.target = "_blank"; // Open in new tab
+      try {
+        const nortonSafeWebUrl = `https://safeweb.norton.com/report/show?url=${encodeURIComponent(url)}`;
+        console.log(`Norton Safe Web URL: ${nortonSafeWebUrl}`); // Log Norton Safe Web URL for debugging
 
-      // Check VirusTotal result
-      const virusTotalResult = await checkVirusTotal(url);
+        nortonSafeWebLink.href = nortonSafeWebUrl;
+        nortonSafeWebLink.target = "_blank"; // Open in new tab
+        nortonSafeWebLink.textContent = 'View Results'; // Update link text
 
-      if (virusTotalResult === 'clean') {
-        reportResult.textContent = 'VirusTotal reports this URL as clean.';
-        resultDiv.style.display = 'block';
-      } else {
-        // Submit phishing report to Discord
-        const reportSent = await submitPhishingReportToDiscord(url, webhookUrl);
+        // Submit phishing report to Discord Webhook
+        const reportSent = await submitPhishingReportToDiscordWebhook(url);
 
         if (reportSent) {
           reportResult.textContent = 'Phishing report submitted successfully to Discord.';
@@ -73,50 +64,19 @@
           reportResult.textContent = 'Failed to submit phishing report.';
         }
 
-        // Show result and VirusTotal link
+        // Show result and Norton Safe Web link
+        resultDiv.style.display = 'block';
+
+      } catch (error) {
+        console.error('Error submitting report:', error);
+        reportResult.textContent = 'Failed to submit phishing report.';
         resultDiv.style.display = 'block';
       }
+    });
 
-    } catch (error) {
-      console.error('Error submitting report:', error);
-      reportResult.textContent = 'Failed to submit phishing report.';
-      resultDiv.style.display = 'block';
-    }
-  });
-
-  async function checkVirusTotal(url) {
-    // NOTE: VirusTotal API requires a API key to use.
-    // You can obtain a API key by creating a account on VirusTotal.
-    const virusTotalApiKey = 'YOUR_API_KEY_HERE';
-    const virusTotalApiUrl = `https://www.virustotal.com/api/v3/urls`;
-    const headers = {
-      'x-apikey': virusTotalApiKey
-    };
-    const data = {
-      'url': url
-    };
-
-    try {
-      const response = await fetch(virusTotalApiUrl, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(data)
-      });
-      const jsonData = await response.json();
-
-      if (jsonData.data.attributes.last_analysis_stats.malicious === 0) {
-        return 'clean';
-      } else {
-        return 'alicious';
-      }
-    } catch (error) {
-      console.error('Error checking VirusTotal:', error);
-      return 'unknown';
-    }
-  }
-
-    async function submitPhishingReportToDiscord(url, webhookUrl) {
-      const data = {
+    async function submitPhishingReportToDiscordWebhook(url) {
+      const webhookUrl = 'YOUR_WEBHOOK_URL_HERE'; // Replace with your Discord webhook URL
+      const webhookData = {
         'content': `Phishing report: ${url}`
       };
 
@@ -126,25 +86,21 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(webhookData)
         });
 
-        if (response.ok) {
-          return true; // Report sent successfully
-        } else {
-          return false; // Report failed to send
-        }
+        return response.ok;
       } catch (error) {
         console.error('Error submitting report:', error);
-        return false; // Report failed to send
+        return false;
       }
     }
 
-    // Add an event listener to the Norton link to open the Norton SafeWeb results page
-  virusTotalLink.addEventListener('click', function(event) {
-    event.preventDefault();
-    window.open(virusTotalLink.href, '_blank');
-  });
+    // Ensure Norton Safe Web link opens in a new tab
+    nortonSafeWebLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      window.open(nortonSafeWebLink.href, '_blank');
+    });
   </script>
 </body>
 <footer>

@@ -119,6 +119,6 @@ main h5{
   font-family: 'Merriweather', serif;
 }
 img-1 img{
-  max-width:50%;
-  margin-left: 170px;
+  width: 80%;
+  height: auto;
 }

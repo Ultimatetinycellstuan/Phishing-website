@@ -23,4 +23,4 @@ https://replit.com/~
 Create a new Repl: Go to Replit and create a new Repl. Choose "HTML, CSS, JS" as the template.
 Upload your files: Upload your HTML, CSS, and JS files to the Repl. You can do this by dragging and dropping the files into the Repl's file explorer or by using the "Upload file" button.
 
-Credits to Kelvin Tran for testing the site for a summer project.
+Credits to Kelvin Tran and Tuan for testing the site for a summer project.

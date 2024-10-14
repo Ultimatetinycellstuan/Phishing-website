@@ -144,23 +144,21 @@ form {
   background-color: #87CEEB;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-.norton-safeweb-btn {
-  background-color: #4CAF50; /* Green background color */
-  color: #fff; /* White text color */
-  padding: 10px 20px; /* Add some padding */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Add a rounded corner */
-  cursor: pointer; /* Change cursor to a pointing hand */
+.norton-safeweb-btn {  
+    background-color: #4CAF50;  
+    color: #fff;  
+    padding: 10px 20px;  
+    border: none;  
+    border-radius: 5px;  
+    cursor: pointer;
 }
-
-.norton-safeweb-btn:hover {
-  background-color: #3e8e41; /* Darker green background color on hover */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow on hover */
+.norton-safeweb-btn:hover {  
+    background-color: #3e8e41;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-
-.norton-safeweb-btn:active {
-  background-color: #3e8e41; /* Darker green background color on active */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Add a more prominent box shadow on active */
+.norton-safeweb-btn:active {  
+    background-color: #3e8e41;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 p {
   text-align: center;

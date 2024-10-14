@@ -165,47 +165,6 @@ form {
 p {
   text-align: center;
   /* Style the loading indicator */
-#loading-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-}
-
-/* Style the error and success messages */
-#error-message, #success-message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 18px;
-}
-
-#error-message {
-  background-color: #f44336;
-  color: #fff;
-}
-
-#success-message {
-  background-color: #8bc34a;
-  color: #fff;
-}
-
-/* Style the Norton Safe Web rating element */
-#norton-safeweb-rating {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-/* Style the shortened URL element */
-#shortened-url {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
 }
 h2{
   text-align: center;

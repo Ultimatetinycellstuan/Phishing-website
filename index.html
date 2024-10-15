@@ -32,90 +32,90 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
-    <script>
-        const MIN_TIME_BETWEEN_SUBMISSIONS = 10000;
-        const shorteners = ['bit.ly', 't.co', 'goo.gl', 'tinyurl.com'];
-        const reportForm = document.getElementById('reportForm');
-        const resultDiv = document.getElementById('result');
-        const reportResult = document.getElementById('reportResult');
-        const nortonSafeWebLink = document.getElementById('nortonLink');
+       <script>
+    const MIN_TIME_BETWEEN_SUBMISSIONS = 10000;
+    const shorteners = ['bit.ly', 't.co', 'goo.gl', 'tinyurl.com'];
+    const reportForm = document.getElementById('reportForm');
+    const resultDiv = document.getElementById('result');
+    const reportResult = document.getElementById('reportResult');
+    const nortonSafeWebLink = document.getElementById('nortonLink');
 
-        function sanitizeInput(input) {
-            return DOMPurify.sanitize(input);
+    function sanitizeInput(input) {
+        return DOMPurify.sanitize(input);
+    }
+
+    function isShortenedUrl(url) {
+        return shorteners.some(shortener => url.includes(shortener));
+    }
+
+    reportForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        let url = document.getElementById('url').value.trim();
+        const submitTime = localStorage.getItem('lastSubmission');
+        let now = new Date().getTime();
+
+        if (submitTime && now - submitTime < MIN_TIME_BETWEEN_SUBMISSIONS) {
+            alert('You are submitting too quickly! Please wait a moment before submitting another report.');
+            return;
         }
 
-        function isShortenedUrl(url) {
-            return shorteners.some(shortener => url.includes(shortener));
+        localStorage.setItem('lastSubmission', now);
+        url = sanitizeInput(url);
+
+        if (!/^https?:\/\//i.test(url)) {
+            url = `https://${url}`;
         }
 
-        reportForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            let url = document.getElementById('url').value.trim();
-            const submitTime = localStorage.getItem('lastSubmission');
-            let now = new Date().getTime();
-
-            if (submitTime && now - submitTime < MIN_TIME_BETWEEN_SUBMISSIONS) {
-                alert('You are submitting too quickly! Please wait a moment before submitting another report.');
-                return;
-            }
-
-            localStorage.setItem('lastSubmission', now);
-            url = sanitizeInput(url);
-
-            if (!/^https?:\/\//i.test(url)) {
-                url = `https://${url}`;
-            }
-
-            if (isShortenedUrl(url)) {
-                alert('Shortened URL detected. Validating with Norton Safe Web...');
-            }
-
-            try {
-                const nortonSafeWebUrl = `https://safeweb.norton.com/report/show?url=${encodeURIComponent(url)}`;
-                nortonSafeWebLink.href = nortonSafeWebUrl;
-                nortonSafeWebLink.target = "_blank";
-                nortonSafeWebLink.textContent = 'View Results';
-
-                const reportSent = await submitPhishingReportToDiscordWebhook(url);
-
-                if (reportSent) {
-                    reportResult.textContent = 'Phishing report submitted successfully to Discord.';
-                } else {
-                    reportResult.textContent = 'Failed to submit phishing report.';
-                }
-
-                resultDiv.style.display = 'block';
-
-            } catch (error) {
-                console.error('Error during Norton validation:', error);
-                reportResult.textContent = 'Failed to validate URL with Norton Safe Web.';
-                resultDiv.style.display = 'block';
-            }
-        });
-
-        async function submitPhishingReportToDiscordWebhook(url) {
-            const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
-            const webhookData = {
-                'content': `Phishing report: ${url}`
-            };
-
-            try {
-                const response = await fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(webhookData)
-                });
-
-                return response.ok;
-            } catch (error) {
-                console.error('Error submitting report:', error);
-                return false;
-            }
+        if (isShortenedUrl(url)) {
+            alert('Shortened URL detected. Validating with Norton Safe Web...');
         }
-    </script>
+
+        try {
+            const nortonSafeWebUrl = `https://safeweb.norton.com/report/show?url=${encodeURIComponent(url)}`;
+            nortonSafeWebLink.href = nortonSafeWebUrl;
+            nortonSafeWebLink.target = "_blank";
+            nortonSafeWebLink.textContent = 'View Results';
+
+            const reportSent = await submitPhishingReportToDiscordWebhook(url);
+
+            if (reportSent) {
+                reportResult.textContent = 'Phishing report submitted successfully to Discord.';
+            } else {
+                reportResult.textContent = 'Failed to submit phishing report.';
+            }
+
+            resultDiv.style.display = 'block';
+
+        } catch (error) {
+            console.error('Error during Norton validation:', error);
+            reportResult.textContent = 'Failed to validate URL with Norton Safe Web.';
+            resultDiv.style.display = 'block';
+        }
+    });
+
+    async function submitPhishingReportToDiscordWebhook(url) {
+        const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
+        const webhookData = {
+            'content': `Phishing report: ${url}`
+        };
+
+        try {
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            });
+
+            return response.ok;
+        } catch (error) {
+            console.error('Error submitting report:', error);
+            return false;
+        }
+    }
+</script>
 </body>
 <footer>
   <p>View this project on <a href="https://github.com/Ultimatetinycellstuan/Ultimatetinycellstuan.github.io" target="_blank">GitHub</a></p>

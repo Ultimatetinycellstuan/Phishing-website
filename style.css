@@ -145,6 +145,7 @@ form {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 .norton-safeweb-btn {
+  position: relative;
   background-color: #4CAF50;
   color: #fff;
   padding: 10px 20px;
@@ -152,16 +153,30 @@ form {
   border-radius: 5px;
   cursor: pointer;
   display: inline-block;
-  transition: background-color 0.5s;
+  overflow: hidden;
+}
+
+.norton-safeweb-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #4CAF50;
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+
+.norton-safeweb-btn:hover::before {
+  transform: translateX(0);
 }
 
 .norton-safeweb-btn:hover {
-  background-color: #3e8e41;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .norton-safeweb-btn:active {
-  background-color: #3e8e41;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 p {

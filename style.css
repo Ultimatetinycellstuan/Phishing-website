@@ -144,7 +144,7 @@ form {
   background-color: #87CEEB;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-.norton-safeweb-btn, .norton-safeweb-btn button {
+.norton-safeweb-btn, a button.norton-safeweb-btn {
   background-color: #4CAF50;
   color: #fff;
   padding: 10px 20px;
@@ -153,12 +153,12 @@ form {
   cursor: pointer;
 }
 
-.norton-safeweb-btn:hover, .norton-safeweb-btn:hover button {
+a button.norton-safeweb-btn:hover {
   background-color: #3e8e41;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.norton-safeweb-btn:active, .norton-safeweb-btn:active button {
+a button.norton-safeweb-btn:active {
   background-color: #3e8e41;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }

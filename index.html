@@ -34,7 +34,6 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
        <script>
     const MIN_TIME_BETWEEN_SUBMISSIONS = 10000;
-    const shorteners = ['bit.ly', 't.co', 'goo.gl', 'tinyurl.com'];
     const reportForm = document.getElementById('reportForm');
     const resultDiv = document.getElementById('result');
     const reportResult = document.getElementById('reportResult');
@@ -44,9 +43,6 @@
         return DOMPurify.sanitize(input);
     }
 
-    function isShortenedUrl(url) {
-        return shorteners.some(shortener => url.includes(shortener));
-    }
 
     reportForm.addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -65,10 +61,6 @@
 
         if (!/^https?:\/\//i.test(url)) {
             url = `https://${url}`;
-        }
-
-        if (isShortenedUrl(url)) {
-            alert('Shortened URL detected. Validating with Norton Safe Web...');
         }
 
         try {

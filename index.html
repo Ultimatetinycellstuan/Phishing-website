@@ -87,26 +87,36 @@
     });
 
     async function submitPhishingReportToDiscordWebhook(url) {
-        const webhookUrl = process.env.WEBHOOK_URL;
-        const webhookData = {
-            'content': `Phishing report: ${url}`
-        };
+  const nortonSafeWebUrl = `https://safeweb.norton.com/report/show?url=${encodeURIComponent(url)}`;
+  const response = await fetch(nortonSafeWebUrl);
+  const nortonSafeWebData = await response.json();
 
-        try {
-            const response = await fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(webhookData)
-            });
+  const rating = nortonSafeWebData.rating;
+  if (rating === 'red' || rating === 'yellow') {
+    const webhookUrl = process.env.WEBHOOK_URL;
+    const webhookData = {
+      'content': `Phishing report: ${url}`
+    };
 
-            return response.ok;
-        } catch (error) {
-            console.error('Error submitting report:', error);
-            return false;
-        }
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(webhookData)
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      return false;
     }
+  } else {
+    console.log(`URL ${url} is safe, not sending report to Discord.`);
+    return false;
+  }
+}
 </script>
 </body>
 <footer>

@@ -95,7 +95,7 @@
     });
 
     async function submitPhishingReportToDiscordWebhook(url) {
-        const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
+        const webhookUrl = process.env.WEBHOOK_URL;
         const webhookData = {
             'content': `Phishing report: ${url}`
         };
